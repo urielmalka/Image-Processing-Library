@@ -37,7 +37,7 @@ unique_ptr<Graphic> Image::loadImage(const char* filename)
         case JPEG:
             return make_unique<ImageJPEG>(filename);
         default:
-            return getPPMTypeClass(filename);
+            return nullptr; // This is error 
     }
 
 

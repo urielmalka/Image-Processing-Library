@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    Image* m = new Image("images_files/gun.jpeG");
+    Image* m = new Image("images_files/gun.jpeg");
 
 
     //m->image->toGray();

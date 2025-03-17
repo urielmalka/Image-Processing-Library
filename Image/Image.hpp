@@ -18,6 +18,8 @@ class Image
         ~Image();
 
         unique_ptr<Graphic> image;
+
+        bool cuda_availble;
 };
 
 
