@@ -17,6 +17,10 @@ ImageFormat Image::getType(const char* filename)
 
     transform(typeImage.begin(),typeImage.end(), typeImage.begin(), ::toupper);
 
+    cudaGetDeviceCount(&cuda_available);
+
+    cout << cuda_available << endl;
+
     if(typeImage == "PPM") return PPM;
     else if(typeImage == "PNG") return PNG;
     else if (typeImage == "JPEG") return JPEG;

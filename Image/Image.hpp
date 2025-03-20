@@ -4,6 +4,7 @@
 #include "Graphic.hpp"
 #include "PPM/PPM.hpp"
 #include "JPEG/JPEG.hpp"
+#include <cuda_runtime.h>
 
 class Image
 {
@@ -19,7 +20,7 @@ class Image
 
         unique_ptr<Graphic> image;
 
-        bool cuda_availble;
+        int cuda_available;
 };
 
 
