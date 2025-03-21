@@ -1,7 +1,13 @@
 #include "Filter.hpp"
 
 
-Filter::Filter(){};
+Filter::Filter(int w, int h, Pixels tPixels)
+{
+    typePixels = tPixels;
+    width = w;
+    height = h;
+    image.resize(width, vector<Pixels>(height,typePixels));
+};
 Filter::~Filter(){};
 
 void Filter::make_filter(vector<vector<int>> &image_pixels , const vector<vector<int>> &filter , int strides)
