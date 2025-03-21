@@ -21,6 +21,8 @@ class Image
         unique_ptr<Graphic> image;
 
         int cuda_available;
+
+        void filter(const vector<vector<int>> &filterMatrix ,int strides);
 };
 
 

@@ -19,11 +19,9 @@ ImageFormat Image::getType(const char* filename)
 
     cudaGetDeviceCount(&cuda_available);
 
-    cout << cuda_available << endl;
-
     if(typeImage == "PPM") return PPM;
-    else if(typeImage == "PNG") return PNG;
-    else if (typeImage == "JPEG") return JPEG;
+    //else if(typeImage == "PNG") return PNG;
+    //else if (typeImage == "JPEG") return JPEG;
     else return ERROR_FORMAT; // Error Type 
 }
 
@@ -46,3 +44,14 @@ unique_ptr<Graphic> Image::loadImage(const char* filename)
 
 
 };
+
+
+void Image::filter(const vector<vector<int>> &filterMatrix ,int strides)
+{
+    if(cuda_available)
+    {
+
+    }else{
+        
+    }
+}
