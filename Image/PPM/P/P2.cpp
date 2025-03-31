@@ -16,16 +16,14 @@ PPM_P2::~PPM_P2() {};
 void PPM_P2::readPixels()
 {
 
-    data.resize(width, vector<Pixels>(height, Grayscale{0}));
+    data.resize(height, vector<Pixels>(width, Grayscale{0}));
 
     int i;
-
-    for(int w=0; w < width; w++){
-        for(int h=0; h < height; h++){
-
+    for(int h=0; h < height; h++){
+        for(int w=0; w < width; w++){
             image >> i;
             cout << i << endl;
-            data[w][h] = Grayscale{static_cast<unsigned char>(i)};
+            data[h][w] = Grayscale{static_cast<unsigned char>(i)};
         }
     }
 

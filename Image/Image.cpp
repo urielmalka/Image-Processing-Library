@@ -21,7 +21,7 @@ ImageFormat Image::getType(const char* filename)
 
     if(typeImage == "PPM") return PPM;
     //else if(typeImage == "PNG") return PNG;
-    //else if (typeImage == "JPEG") return JPEG;
+    else if (typeImage == "JPEG") return JPEG;
     else return ERROR_FORMAT; // Error Type 
 }
 

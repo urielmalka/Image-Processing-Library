@@ -3,13 +3,17 @@
 
 ImageJPEG::ImageJPEG (const char* fn) : Graphic(fn,JPEG) {
 
-    if(!openImage()) {};
+    // Read the image using OpenCV
+    readImage = cv::imread(fn);
+    if (readImage.empty()) {
+        std::cerr << "Error: Could not open the image." << std::endl;
+    }
 
     type = "JPEG";
  
     setWidthHeightChannels();
 
-    cout << width << " " << height << " " << channels << std::endl;
+    cout << height << " " << width << " " << channels << std::endl;
 
     readPixels();
 
@@ -19,82 +23,61 @@ ImageJPEG::~ImageJPEG() {};
 
 
 void ImageJPEG::setWidthHeightChannels() {
-
-    unsigned char buffer[2];
-    
-    // Read the first two bytes (JPEG header)
-    image.read(reinterpret_cast<char *>(buffer), 2);
-    if (buffer[0] != 0xFF || buffer[1] != 0xD8) {
-        throw runtime_error("Not a valid JPEG file!");
-    }
-
-    // Look for the Start of Frame (SOF0 or SOF2) marker
-    while (image.read(reinterpret_cast<char *>(buffer), 2)) {
-        if (buffer[0] == 0xFF && (buffer[1] >= 0xC0 && buffer[1] <= 0xC3)) { 
-            // SOF0 (0xC0) or SOF2 (0xC2) found, which contain image dimensions
-            
-            unsigned char segmentLength[2];
-            image.read(reinterpret_cast<char *>(segmentLength), 2); // Read segment length (not needed here)
-            
-            unsigned char precision;
-            image.read(reinterpret_cast<char *>(&precision), 1); // Read precision (8-bit for standard JPEG)
-
-            unsigned char sizeData[4];
-            image.read(reinterpret_cast<char *>(sizeData), 4); // Read height and width
-
-            height = (sizeData[0] << 8) + sizeData[1];
-            width = (sizeData[2] << 8) + sizeData[3];
-
-            unsigned char tempChannel;
-            image.read(reinterpret_cast<char *>(&tempChannel), 1); // Read number of color channels
-            channels = static_cast<int>(tempChannel);
-
-            return;
-        } 
-        else {  
-            // Skip the current segment
-            unsigned char segmentLength[2];
-            image.read(reinterpret_cast<char *>(segmentLength), 2);
-            int length = (segmentLength[0] << 8) + segmentLength[1];
-            image.seekg(length - 2, ios::cur); // Move to the next segment
-        }
-    }
-
-    throw runtime_error("Could not find valid SOF marker in JPEG file!");
+    height = static_cast<int>(readImage.rows);
+    width = static_cast<int>(readImage.cols);
+    channels = readImage.channels();
 }
 
 
 void ImageJPEG::readPixels()
 {
     if(channels == 1)
-        data.resize(width, vector<Pixels>(height, Grayscale{0}));
+        data.resize(height, vector<Pixels>(width, Grayscale{0}));
     else
-        data.resize(width, vector<Pixels>(height, RGB{0,0,0}));
+        data.resize(height, vector<Pixels>(width, RGB{0,0,0}));
 
-    unsigned char i,r,g,b;
 
-    for(int w=0; w < width; w++){
-        for(int h=0; h < height; h++){
-
-            if(channels == 1){
-                image.read(reinterpret_cast<char*>(&i), 1);
-                data[w][h] = Grayscale{i};
-            }else{
-                image.read(reinterpret_cast<char*>(&r), 1);
-                image.read(reinterpret_cast<char*>(&g), 1);
-                image.read(reinterpret_cast<char*>(&b), 1);
-                data[w][h] = RGB{r,g,b};
+    for (int  h= 0; h < height; h++) {
+        if (channels == 1) {
+            const unsigned char* rowGrayscale = readImage.ptr<unsigned char>(h);
+            for (int w = 0; w < width ; w++) {
+                data[h][w] = Grayscale{rowGrayscale[w]};
             }
-
+        } else {
+            const cv::Vec3b* rowRGB = readImage.ptr<cv::Vec3b>(h);
+            for (int w = 0; w < width; w++) {
+                data[h][w] = RGB{rowRGB[w][2], rowRGB[w][1], rowRGB[w][0]};
+            }
         }
     }
 
 
-    image.close(); // Close file Image
 }
 
 
 void ImageJPEG::save(const char* path)
 {
+    
+    cv::Mat image(height, width, grayscalImage ? CV_8UC1 : CV_8UC3);
 
+    std::cout << data.size() << "x" << data[0].size() << endl;
+
+    for (int h = 0; h < height; h++) {
+        for (int w = 0; w < width; w++) {
+            if (grayscalImage) {
+                auto pixel = std::get<Grayscale>(data[h][w]);
+                image.at<uchar>(h, w) = pixel.I;
+            } else {
+                auto pixel = std::get<RGB>(data[h][w]);
+                image.at<cv::Vec3b>(h, w) = cv::Vec3b(pixel.B, pixel.G, pixel.R); // OpenCV uses BGR
+            }
+        }
+    }
+    
+    // Save as JPEG
+    if (cv::imwrite(path, image)) {
+        std::cout << "Image saved as " << filename << std::endl;
+    } else {
+        std::cerr << "Failed to save image!" << std::endl;
+    }
 }

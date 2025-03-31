@@ -26,12 +26,11 @@ void Graphic::toGray ()
 {
     if(grayscalImage) return;
     grayscalImage = true;
-
-    for(int w=0; w < width; w++){
-        for(int h=0; h < height; h++){
-
-            if(auto *rgb = get_if<RGB>(&data[w][h])){
-                data[w][h] = Grayscale{luminanceFormula(rgb)};
+    
+    for(int h=0; h < height; h++){
+        for(int w=0; w < width; w++){
+            if(auto *rgb = get_if<RGB>(&data[h][w])){
+                data[h][w] = Grayscale{luminanceFormula(rgb)};
             }
             
         }

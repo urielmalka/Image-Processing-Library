@@ -2,6 +2,7 @@
 #define JPEG_HPP
 
 #include "../Graphic.hpp"
+#include <opencv2/opencv.hpp>
 
 class ImageJPEG : public Graphic {
 
@@ -16,6 +17,9 @@ class ImageJPEG : public Graphic {
     
     
     private:
+        // Read the image using OpenCV
+        cv::Mat readImage;
+
         void setWidthHeightChannels();
 };
 

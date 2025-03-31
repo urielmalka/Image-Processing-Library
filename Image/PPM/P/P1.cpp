@@ -15,15 +15,14 @@ PPM_P1::~PPM_P1() {};
 void PPM_P1::readPixels()
 {
 
-    data.resize(width, vector<Pixels>(height, BinPixel{0}));
+    data.resize(height, vector<Pixels>(width, BinPixel{0}));
 
     bool bin;
 
-    for(int w=0; w < width; w++){
-        for(int h=0; h < height; h++){
-
+    for(int h=0; h < height; h++){
+        for(int w=0; w < width; w++){
             image >> bin;
-            data[w][h] = BinPixel{bin};
+            data[h][w] = BinPixel{bin};
             cout << bin << endl;
         }
     }

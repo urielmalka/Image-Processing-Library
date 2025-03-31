@@ -22,7 +22,7 @@ ImagePPM::ImagePPM (const char* fn, PPMFormat p) : Graphic(fn,PPM) {
     getline(image,line);
 
     istringstream iss(line);
-    iss >> width >> height;
+    iss >> height >> width;
     iss.clear();
 
     if(type != "P1"){
@@ -46,24 +46,24 @@ void ImagePPM::save (const char* path) {
         save_image << type << std::endl;
         cout << type << std::endl;
 
-        save_image << width << " " << height << std::endl;
-        cout << width << " " << height << std::endl;
+        save_image << height << " " << width << std::endl;
+        cout << height << " " << width << std::endl;
         
         if(type != "P1"){
             save_image << max_value << std::endl;
             cout << max_value << std::endl;
         }
 
-        for(int w = 0; w < width; w++)
+        for(int h=0; h < height; h++) 
         {
-            for(int h=0; h < height; h++)
+            for(int w = 0; w < width; w++)
             {
-                if(auto *rgb = get_if<RGB>(&data[w][h]))
+                if(auto *rgb = get_if<RGB>(&data[h][w]))
                     save_image << rgb->R << " " << rgb->G << " " << rgb->B << std::endl;
-                else if (auto *gray = get_if<Grayscale>(&data[w][h]))
+                else if (auto *gray = get_if<Grayscale>(&data[h][w]))
                 {
                     save_image << static_cast<int>(gray->I) << std::endl;
-                }else if (auto *bin = get_if<BinPixel>(&data[w][h]))
+                }else if (auto *bin = get_if<BinPixel>(&data[h][w]))
                 {
                     save_image << static_cast<int>(bin->BIN) << std::endl;
                 }
