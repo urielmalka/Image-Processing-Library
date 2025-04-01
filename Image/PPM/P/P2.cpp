@@ -19,6 +19,8 @@ void PPM_P2::readPixels()
     data.resize(height, vector<Pixels>(width, Grayscale{0}));
 
     int i;
+    
+    #pragma omp parallel for
     for(int h=0; h < height; h++){
         for(int w=0; w < width; w++){
             image >> i;

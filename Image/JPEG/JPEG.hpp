@@ -2,16 +2,13 @@
 #define JPEG_HPP
 
 #include "../Graphic.hpp"
-#include <opencv2/opencv.hpp>
+#include "../OCV/OCV.hpp"
 
-class ImageJPEG : public Graphic {
+class ImageJPEG : public OCV, public Graphic {
 
     public:
         ImageJPEG(const char* fn);
         virtual ~ImageJPEG();
-
-        void readPixels() override;
-
 
         void save(const char* path);
     
@@ -19,7 +16,8 @@ class ImageJPEG : public Graphic {
     private:
         // Read the image using OpenCV
         cv::Mat readImage;
-
+        
+        void readPixels() override;
         void setWidthHeightChannels();
 };
 

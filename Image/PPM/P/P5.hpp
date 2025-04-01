@@ -11,9 +11,8 @@ class PPM_P5 : public ImagePPM {
         PPM_P5(const char* fn);
         ~PPM_P5();
 
-        void readPixels() override;
-
     private:
+        void readPixels() override;
 
 };
 

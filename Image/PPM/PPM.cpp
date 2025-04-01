@@ -9,7 +9,7 @@
 
 ImagePPM::ImagePPM (const char* fn, PPMFormat p) : Graphic(fn,PPM) {
 
-    if(!openImage()) {};
+    if(!openImage()) return;
     
     string line;
 

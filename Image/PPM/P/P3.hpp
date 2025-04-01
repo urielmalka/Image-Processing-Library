@@ -10,10 +10,9 @@ class PPM_P3 : public ImagePPM {
     public:
         PPM_P3(const char* fn);
         ~PPM_P3();
-        
-        void readPixels() override;
 
     private:
+        void readPixels() override;
 
 };
 

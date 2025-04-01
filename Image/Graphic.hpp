@@ -9,9 +9,12 @@
 #include <algorithm> 
 #include <memory>
 #include <string>
+#include <omp.h>
 
 class ImagePPM;
 class ImageJPEG;
+class ImagePNG;
+class ImageBMP;
 
 using namespace std;
 
@@ -33,6 +36,10 @@ struct RGB{
     unsigned char R,G,B;
 };
 
+struct BGR {
+    uint8_t b, g, r; // for .BMP
+};
+
 struct Grayscale{
     unsigned char I; // intensity
 };
@@ -41,8 +48,14 @@ struct BinPixel{
     bool BIN; // Binary value 
 };
 
+struct Dimensions{
+    int height;
+    int width;
+    int channels;
+};
 
-using Pixels = variant<RGB, Grayscale, BinPixel>;
+
+using Pixels = variant<RGB, BGR, Grayscale, BinPixel>;
 
 class Graphic {
 
@@ -57,9 +70,8 @@ class Graphic {
         fstream image;
         string type;
 
-
-        int width;
         int height;
+        int width;
         int max_value;
         int channels;
 
@@ -67,12 +79,17 @@ class Graphic {
         bool grayscalImage = false;
 
         vector<vector<Pixels>>  data;
+        vector<Pixels> flatdata;
 
+        void flat();
         virtual void toGray();
         virtual void save(const char* path);
+
+        Dimensions size(){ return Dimensions{height, width, channels}; }
     
         protected:
             bool openImage();
+            bool openImageBinary();
 
             virtual void readPixels();
             unsigned char luminanceFormula(RGB *rgb);

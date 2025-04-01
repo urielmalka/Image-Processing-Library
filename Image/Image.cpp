@@ -20,8 +20,9 @@ ImageFormat Image::getType(const char* filename)
     cudaGetDeviceCount(&cuda_available);
 
     if(typeImage == "PPM") return PPM;
-    //else if(typeImage == "PNG") return PNG;
-    else if (typeImage == "JPEG") return JPEG;
+    else if(typeImage == "PNG") return PNG;
+    else if (typeImage == "JPEG" || typeImage == "JPG") return JPEG;
+    else if (typeImage == "BMP") return BMP;
     else return ERROR_FORMAT; // Error Type 
 }
 
@@ -34,10 +35,12 @@ unique_ptr<Graphic> Image::loadImage(const char* filename)
     {
         case PPM:
             return getPPMTypeClass(filename);
-        // case PNG:
-        //     return getPPMTypeClass(filename);
+        case PNG:
+             return make_unique<ImagePNG>(filename);
         case JPEG:
             return make_unique<ImageJPEG>(filename);
+        case BMP:
+            return make_unique<ImageBMP>(filename);
         default:
             return nullptr; // This is error 
     }

@@ -27,14 +27,14 @@ class ImagePPM : public Graphic {
 
         PPMFormat ppmFormat;
 
-        virtual void readPixels() override;
-
         /*Filters*/
         void toGray() override;
 
         void save(const char* path);
     
-    
+    protected:
+        virtual void readPixels() override;
+
     private:
         
 };

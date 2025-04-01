@@ -1,12 +1,11 @@
-#include "JPEG.hpp"
+#include "PNG.hpp"
 
 
-ImageJPEG::ImageJPEG (const char* fn) : Graphic(fn,JPEG) {
+ImagePNG::ImagePNG (const char* fn) : Graphic(fn,JPEG) {
 
-    
     if(!ocvOpenImage(fn)) return;
 
-    type = "JPEG";
+    type = "PNG";
  
     setWidthHeightChannels();
 
@@ -14,22 +13,22 @@ ImageJPEG::ImageJPEG (const char* fn) : Graphic(fn,JPEG) {
 
 };
 
-ImageJPEG::~ImageJPEG() {};
+ImagePNG::~ImagePNG() {};
 
 
-void ImageJPEG::setWidthHeightChannels() {
+void ImagePNG::setWidthHeightChannels() {
 
     ocvSetWidthHeightChannels(&height, &width, &channels);
 }
 
 
-void ImageJPEG::readPixels()
+void ImagePNG::readPixels()
 {
     ocvReadPixels(&data, height, width, channels);
 }
 
 
-void ImageJPEG::save(const char* path)
+void ImagePNG::save(const char* path)
 {
     ocvSave(path,data, height, width, grayscalImage);
 }

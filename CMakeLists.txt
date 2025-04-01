@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenCV 4 REQUIRED)
+find_package(OpenMP REQUIRED)
 enable_language(CUDA)
 
 include_directories(${OpenCV_INCLUDE_DIRS} ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
@@ -30,8 +31,14 @@ add_executable(main
     Image/PPM/P/P6.cpp 
     Image/PPM/P/P7.hpp 
     Image/PPM/P/P7.cpp 
+    Image/OCV/OCV.hpp
+    Image/OCV/OCV.cpp
+    Image/PNG/PNG.hpp
+    Image/PNG/PNG.cpp
     Image/JPEG/JPEG.hpp
     Image/JPEG/JPEG.cpp
+    Image/BMP/BMP.hpp
+    Image/BMP/BMP.cpp
 )
 
-target_link_libraries(main ${OpenCV_LIBS} cudart)
+target_link_libraries(main ${OpenCV_LIBS} cudart OpenMP::OpenMP_CXX)

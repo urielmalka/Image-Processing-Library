@@ -4,6 +4,8 @@
 #include "Graphic.hpp"
 #include "PPM/PPM.hpp"
 #include "JPEG/JPEG.hpp"
+#include "PNG/PNG.hpp"
+#include "BMP/BMP.hpp"
 #include <cuda_runtime.h>
 
 class Image

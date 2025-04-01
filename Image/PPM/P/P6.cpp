@@ -18,6 +18,8 @@ void PPM_P6::readPixels()
     string line;
     istringstream iss(line);
     unsigned char r,g,b;
+
+    #pragma omp parallel for
     for(int h=0; h < height; h++){
         for(int w=0; w < width; w++){
             image.read(reinterpret_cast<char *>(&r), 1);
