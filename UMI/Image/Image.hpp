@@ -8,7 +8,7 @@
 #include "UMI/Image/BMP/BMP.hpp"
 #include <cuda_runtime.h>
 
-class Image
+class UMImage
 {
     private:
 
@@ -17,8 +17,8 @@ class Image
         
 
     public:
-        Image(const char* filename);
-        ~Image();
+        UMImage(const char* filename);
+        ~UMImage();
 
         unique_ptr<Graphic> image;
 
@@ -28,13 +28,13 @@ class Image
 };
 
 
-Image::Image(const char* filename){
+UMImage::UMImage(const char* filename){
     image = loadImage(filename);
 };
 
-Image::~Image(){};
+UMImage::~UMImage(){};
 
-ImageFormat Image::getType(const char* filename)
+ImageFormat UMImage::getType(const char* filename)
 {
     string fname(filename), typeImage;
     size_t pos = fname.rfind('.');
@@ -52,7 +52,7 @@ ImageFormat Image::getType(const char* filename)
     else return ERROR_FORMAT; // Error Type 
 }
 
-unique_ptr<Graphic> Image::loadImage(const char* filename)
+unique_ptr<Graphic> UMImage::loadImage(const char* filename)
 {
 
     ImageFormat tf = getType(filename);
@@ -75,7 +75,7 @@ unique_ptr<Graphic> Image::loadImage(const char* filename)
 };
 
 
-void Image::filter(const vector<vector<int>> &filterMatrix ,int strides)
+void UMImage::filter(const vector<vector<int>> &filterMatrix ,int strides)
 {
     if(cuda_available)
     {
