@@ -1,4 +1,22 @@
-#include "PNG.hpp"
+#ifndef PNG_HPP
+#define PNG_HPP
+
+#include "UMI/Image/Graphic.hpp"
+#include "UMI/Image/OCV/OCV.hpp"
+
+class ImagePNG : public OCV, public Graphic {
+
+    public:
+        ImagePNG(const char* fn);
+        virtual ~ImagePNG();
+
+        void save(const char* path);
+    
+    
+    private:
+        void readPixels() override;
+        void setWidthHeightChannels();
+};
 
 
 ImagePNG::ImagePNG (const char* fn) : Graphic(fn,JPEG) {
@@ -32,3 +50,5 @@ void ImagePNG::save(const char* path)
 {
     ocvSave(path,data, height, width, grayscalImage);
 }
+
+#endif

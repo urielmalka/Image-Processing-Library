@@ -1,5 +1,31 @@
-#include "Image.hpp"
+#ifndef IMAGE_HPP
+#define IMAGE_HPP
 
+#include "UMI/Image/Graphic.hpp"
+#include "UMI/Image/PPM/PPM.hpp"
+#include "UMI/Image/JPEG/JPEG.hpp"
+#include "UMI/Image/PNG/PNG.hpp"
+#include "UMI/Image/BMP/BMP.hpp"
+#include <cuda_runtime.h>
+
+class Image
+{
+    private:
+
+        ImageFormat getType(const char* filename);
+        unique_ptr<Graphic> loadImage(const char* filename);
+        
+
+    public:
+        Image(const char* filename);
+        ~Image();
+
+        unique_ptr<Graphic> image;
+
+        int cuda_available;
+
+        void filter(const vector<vector<int>> &filterMatrix ,int strides);
+};
 
 
 Image::Image(const char* filename){
@@ -58,3 +84,5 @@ void Image::filter(const vector<vector<int>> &filterMatrix ,int strides)
         
     }
 }
+
+#endif

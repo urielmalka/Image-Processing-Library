@@ -1,4 +1,4 @@
-#include "Image/Image.hpp"
+#include <UMI/UMI.hpp>
 
 #include <iostream>
 #include <fstream>
