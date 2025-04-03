@@ -83,9 +83,13 @@ class Graphic {
         vector<vector<Pixels>>  data;
         vector<Pixels> flatdata;
 
-        void flat();
+        
         virtual void toGray();
         virtual void save(const char* path);
+
+        void rotate(int degrees);
+        void crop(int x,int y, int w, int h);
+        void flat();
 
         Dimensions size(){ return Dimensions{height, width, channels}; }
     
@@ -127,7 +131,7 @@ bool Graphic::openImageBinary()
 
 void Graphic::flat()
 {
-    flatdata.resize(height * width);
+    flatdata.reserve(height * width);
 
     for (int h=0 ; h < height ; h++)
     {
@@ -140,7 +144,6 @@ void Graphic::flat()
 
 void Graphic::save(const char* path) {};
 void Graphic::readPixels() {};
-
 
 void Graphic::toGray ()
 {
@@ -168,6 +171,28 @@ unsigned char Graphic::luminanceFormula(RGB *rgb)
     return (0.299 * rgb->R) + (0.587 * rgb->G) + (0.114 * rgb->B);
 };
 
+void Graphic::rotate(int degrees){};
 
+
+void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
+{
+    if (xPos < 0 || yPos < 0 || xPos + w_size > width || yPos + h_size > height)
+        throw std::out_of_range("Crop dimensions out of bounds");
+
+
+    vector<vector<Pixels>>  new_data;
+    new_data.reserve(h_size);
+
+    for(int h=yPos ; h < yPos + h_size ; h++)
+    {
+            new_data.emplace_back(data[h].begin() + xPos, data[h].begin() + xPos + w_size);
+    }
+    
+
+    data = move(new_data);
+    width = w_size;
+    height = h_size;
+
+};
 
 #endif

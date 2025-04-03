@@ -27,7 +27,7 @@ class ImagePPM : public Graphic {
         /*Filters*/
         void toGray() override;
 
-        void save(const char* path);
+        virtual void save(const char* path);
     
     protected:
         virtual void readPixels() override;
@@ -51,7 +51,7 @@ ImagePPM::ImagePPM (const char* fn, PPMFormat p) : Graphic(fn,PPM) {
     getline(image,line);
 
     istringstream iss(line);
-    iss >> height >> width;
+    iss >> width >> height;
     iss.clear();
 
     if(type != "P1"){
@@ -370,6 +370,7 @@ class PPM_P6 : public ImagePPM {
 
     private:
         void readPixels() override;
+        void save(const char* path) override;
 
 };
 
@@ -393,7 +394,6 @@ void PPM_P6::readPixels()
     istringstream iss(line);
     unsigned char r,g,b;
 
-    #pragma omp parallel for
     for(int h=0; h < height; h++){
         for(int w=0; w < width; w++){
             image.read(reinterpret_cast<char *>(&r), 1);
@@ -408,6 +408,40 @@ void PPM_P6::readPixels()
     
     image.close();
 };
+
+void PPM_P6::save(const char* path)
+{
+
+    ofstream out(path, ios::binary);
+    if (!out.is_open()) {
+        cerr << "Failed to open file for writing: " << filename << endl;
+        return;
+    }
+
+    // Write P6 header
+    out << "P6\n" << width << " " << height << "\n255\n";
+
+    vector<RGB> tempFlatData;
+    tempFlatData.reserve(height * width * 3);
+
+    // Write binary pixel data
+    for (int h = 0; h < height; ++h) {
+        for (auto& pixel : data[h]) {
+            if (std::holds_alternative<RGB>(pixel)) {
+                tempFlatData.push_back(std::get<RGB>(pixel));
+            }
+            else {
+                cerr << "Non-RGB pixel found in data!" << endl;
+                // Optional: convert BGR/Grayscale/BinPixel to RGB here if needed
+            }
+        }
+    }
+
+    out.write(reinterpret_cast<const char*>(tempFlatData.data()), width * height * 3);
+
+    out.close();
+}
+
 
 /*
     PPM TYPE P7

@@ -14,17 +14,23 @@ class UMImage
 
         ImageFormat getType(const char* filename);
         unique_ptr<Graphic> loadImage(const char* filename);
-        
+        unique_ptr<Graphic> image;
 
     public:
         UMImage(const char* filename);
         ~UMImage();
 
-        unique_ptr<Graphic> image;
+        
 
         int cuda_available;
 
         void filter(const vector<vector<int>> &filterMatrix ,int strides);
+
+        void rotate(int degrees){ image->rotate(degrees); }
+        void toGray(){ image->toGray(); }
+        void save(const char* path){ image->save(path); }
+        void crop(int x,int y, int w, int h) { image->crop(x,y,w,h); };
+        Dimensions size(){ return image->size(); }; 
 };
 
 
@@ -84,5 +90,6 @@ void UMImage::filter(const vector<vector<int>> &filterMatrix ,int strides)
         
     }
 }
+
 
 #endif
