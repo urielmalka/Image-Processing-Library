@@ -83,6 +83,7 @@ class Graphic {
         vector<vector<Pixels>>  data;
         vector<Pixels> flatdata;
 
+        void padding(int w, int h);
         
         virtual void toGray();
         virtual void save(const char* path);
@@ -194,5 +195,10 @@ void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
     height = h_size;
 
 };
+
+void Graphic::padding(int w, int h)
+{
+
+}
 
 #endif

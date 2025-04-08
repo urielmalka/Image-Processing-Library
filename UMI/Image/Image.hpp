@@ -24,12 +24,17 @@ class UMImage
 
         int cuda_available;
 
+        void convert(ImageFormat newFormat);
+        void padding(int w, int h){ image->padding(w, h); };
+
         void filter(const vector<vector<int>> &filterMatrix ,int strides);
 
         void rotate(int degrees){ image->rotate(degrees); }
         void toGray(){ image->toGray(); }
         void save(const char* path){ image->save(path); }
         void crop(int x,int y, int w, int h) { image->crop(x,y,w,h); };
+
+
         Dimensions size(){ return image->size(); }; 
 };
 
@@ -89,6 +94,11 @@ void UMImage::filter(const vector<vector<int>> &filterMatrix ,int strides)
     }else{
         
     }
+}
+
+void UMImage::convert(ImageFormat newFormat)
+{
+
 }
 
 
