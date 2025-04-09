@@ -7,6 +7,7 @@
 class ImageJPEG : public OCV, public Graphic {
 
     public:
+        ImageJPEG();
         ImageJPEG(const char* fn);
         virtual ~ImageJPEG();
 
@@ -20,6 +21,8 @@ class ImageJPEG : public OCV, public Graphic {
         void readPixels() override;
         void setWidthHeightChannels();
 };
+
+ImageJPEG::ImageJPEG () : Graphic(JPEG) {}
 
 ImageJPEG::ImageJPEG (const char* fn) : Graphic(fn,JPEG) {
 

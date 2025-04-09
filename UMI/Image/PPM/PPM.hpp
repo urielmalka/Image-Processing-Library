@@ -19,6 +19,7 @@ unique_ptr<ImagePPM> getPPMTypeClass(const char* filename);
 class ImagePPM : public Graphic {
 
     public:
+        ImagePPM(PPMFormat p);
         ImagePPM(const char* fn, PPMFormat p);
         virtual ~ImagePPM();
 
@@ -35,6 +36,11 @@ class ImagePPM : public Graphic {
     private:
         
 };
+
+ImagePPM::ImagePPM (PPMFormat p) : Graphic(PPM) 
+{
+    ppmFormat = p;
+}
 
 ImagePPM::ImagePPM (const char* fn, PPMFormat p) : Graphic(fn,PPM) {
 
@@ -197,6 +203,7 @@ void PPM_P1::readPixels()
 class PPM_P2 : public ImagePPM {
 
     public:
+        PPM_P2();
         PPM_P2(const char* fn);
         ~PPM_P2();
 
@@ -205,7 +212,7 @@ class PPM_P2 : public ImagePPM {
 
 };
 
-
+PPM_P2::PPM_P2(): ImagePPM(P2) {};
 
 PPM_P2::PPM_P2(const char* fn): ImagePPM(fn, P2)
 {
@@ -251,6 +258,7 @@ void PPM_P2::readPixels()
 class PPM_P3 : public ImagePPM {
 
     public:
+        PPM_P3();
         PPM_P3(const char* fn);
         ~PPM_P3();
 
@@ -259,6 +267,10 @@ class PPM_P3 : public ImagePPM {
 
 };
 
+PPM_P3::PPM_P3(): ImagePPM(P3)
+{
+
+};
 
 PPM_P3::PPM_P3(const char* fn): ImagePPM(fn, P3)
 {

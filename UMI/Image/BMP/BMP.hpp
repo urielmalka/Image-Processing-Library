@@ -32,13 +32,17 @@ class ImageBMP : public Graphic
         void readPixels() override;
 
     public:
+        ImageBMP();
         ImageBMP(const char* fn);
         ~ImageBMP();
 
         void save(const char* path);
 };
 
+ImageBMP::ImageBMP() : Graphic(BMP)
+{
 
+}
 
 ImageBMP::ImageBMP(const char* fn) : Graphic(fn,BMP)
 {

@@ -98,7 +98,33 @@ void UMImage::filter(const vector<vector<int>> &filterMatrix ,int strides)
 
 void UMImage::convert(ImageFormat newFormat)
 {
+    std::unique_ptr<Graphic> newImage;
 
+    switch (newFormat)
+    {
+        case PPM:
+            if (image->grayscalImage) {
+                newImage = std::make_unique<PPM_P2>();
+            } else {
+                newImage = std::make_unique<PPM_P3>();
+            }
+            break;
+        case PNG:
+            newImage = std::make_unique<ImagePNG>();
+            break;
+        case JPEG:
+            newImage = std::make_unique<ImageJPEG>();
+            break;
+        case BMP:
+            newImage = std::make_unique<ImageBMP>();
+            break;
+        default:
+            return; // ERROR
+    }
+
+    newImage->setObject(image.get()); 
+
+    image = std::move(newImage); 
 }
 
 

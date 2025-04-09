@@ -63,6 +63,7 @@ class Graphic {
 
     public:
 
+        Graphic(ImageFormat f);
         Graphic(const char* fn, ImageFormat f);
         virtual ~Graphic(); 
 
@@ -92,6 +93,8 @@ class Graphic {
         void crop(int x,int y, int w, int h);
         void flat();
 
+        void setObject(Graphic* oldImage);
+
         Dimensions size(){ return Dimensions{height, width, channels}; }
     
         protected:
@@ -103,6 +106,10 @@ class Graphic {
 
 };
 
+Graphic::Graphic(ImageFormat f) 
+{
+    format = f;
+};
 
 Graphic::Graphic(const char* fn, ImageFormat f) 
 {
@@ -199,6 +206,22 @@ void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
 void Graphic::padding(int w, int h)
 {
 
+}
+
+
+void Graphic::setObject(Graphic* oldImage)
+{
+    data = move(oldImage->data);
+
+    type = oldImage->type;
+
+    height = oldImage->height;
+    width = oldImage->width;
+    max_value = oldImage->max_value;
+    channels = oldImage->channels;
+
+    loadFileSuccess = oldImage->loadFileSuccess;
+    grayscalImage = oldImage->grayscalImage;
 }
 
 #endif
