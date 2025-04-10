@@ -11,6 +11,7 @@ include_directories(${OpenCV_INCLUDE_DIRS} ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTOR
 
 add_executable(main
     main.cpp
+    UMI/Image/Filter/FilterCuda.cu
 )
 target_include_directories(main PRIVATE .)
 target_link_libraries(main ${OpenCV_LIBS} cudart OpenMP::OpenMP_CXX)

@@ -7,7 +7,8 @@
 #include "UMI/Image/PNG/PNG.hpp"
 #include "UMI/Image/BMP/BMP.hpp"
 #include "Filter/Filter.hpp"
-#include <cuda_runtime.h>
+#include "Filter/FilterCuda.cuh"
+
 
 class UMImage
 {
@@ -57,6 +58,8 @@ ImageFormat UMImage::getType(const char* filename)
     transform(typeImage.begin(),typeImage.end(), typeImage.begin(), ::toupper);
 
     cudaGetDeviceCount(&cuda_available);
+
+    FilterCuda *f = new FilterCuda();
 
     if(typeImage == "PPM") return PPM;
     else if(typeImage == "PNG") return PNG;
