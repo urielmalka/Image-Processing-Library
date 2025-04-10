@@ -3,33 +3,28 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <vector>
 
 using namespace std::chrono;
 
 int main(int argc, char *argv[])
 {   
     auto start = high_resolution_clock::now();
-    Image* m = new Image("sample_640×426.bmp");
 
-    Dimensions d = m->image->size();
+    UMImage* m = new UMImage("sample.ppm"); // Load image
 
-    cout << d.height << "x" << d.width << "x"<< d.channels << endl;
+    std::vector<std::vector<int>> filter_example = {{-2,0,-2},{-1,0,-1},{-1,0,1}}; // Filter 
 
-   //m->image->toGray();
 
-    d = m->image->size();
+    m->filter(filter_example); // Applying a filter to the image
+    m->convert(PNG); // Convert to new format 
+    m->save("edit_sample.png"); // save the image
 
-    cout << d.height << "x" << d.width << "x"<< d.channels << endl;
-    
-    m->image->save("gun.bmp");
+
 
     auto stop = high_resolution_clock::now();
-
-
-    auto duration = duration_cast<microseconds>(stop - start);
-
-    cout << "Time taken by function: "
-            << duration.count() << " microseconds" << endl;
+    auto duration = duration_cast<milliseconds>(stop - start);
+    cout << "Time taken by function: "<< duration.count() << " milliseconds" << endl;
 
 
     return 0;

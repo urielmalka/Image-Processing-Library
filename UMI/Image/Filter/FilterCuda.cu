@@ -4,7 +4,7 @@
 
 FilterCuda::FilterCuda()
 {
-    std::cout << "FilterCuda available." << std::endl;
+    //std::cout << "FilterCuda available." << std::endl;
 };
 FilterCuda::~FilterCuda(){};
 

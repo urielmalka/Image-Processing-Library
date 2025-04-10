@@ -85,12 +85,9 @@ vector<vector<Pixels>> Filter::make_filter(vector<vector<Pixels>> &image_pixels)
     int image_h = image_pixels.size();
     int image_w = image_pixels[0].size();
 
-    std::cout << _hf << "|" << _wf << endl;
-
     vector<PixelLocation> locations;
     vector<vector<Pixels>> image(image_h - _hf - h_isOdd, vector<Pixels>(image_w - _wf - w_isOdd));
 
-    std::cout << image.size() << "|" << image[0].size() << endl;
 
     for(int h = _hf ; h < (image_h - _hf)  ; h++){
         for(int w = _wf ; w < (image_w - _wf)  ; w++){
