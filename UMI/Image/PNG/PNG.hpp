@@ -7,6 +7,7 @@
 class ImagePNG : public OCV, public Graphic {
 
     public:
+        ImagePNG();
         ImagePNG(const char* fn);
         virtual ~ImagePNG();
 
@@ -18,6 +19,7 @@ class ImagePNG : public OCV, public Graphic {
         void setWidthHeightChannels();
 };
 
+ImagePNG::ImagePNG () : Graphic(JPEG) {};
 
 ImagePNG::ImagePNG (const char* fn) : Graphic(fn,JPEG) {
 

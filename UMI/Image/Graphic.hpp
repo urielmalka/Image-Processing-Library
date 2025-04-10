@@ -203,9 +203,30 @@ void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
 
 };
 
-void Graphic::padding(int w, int h)
+void Graphic::padding(int padding_w, int padding_h)
 {
+    int pW = padding_w / 2;
+    int pH = padding_h / 2;
 
+    height += padding_h;
+    width += padding_w;
+
+    vector<vector<Pixels>>  tempData;
+    
+    tempData.resize(height);
+
+    for (int h = 0; h < height; ++h)
+    {
+        tempData[h].resize(width);
+    }
+
+    for (int h = pH; h < height - pH; ++h) {
+        for (int w = pW; w < width - pW; ++w) {
+            tempData[h][w] = data[h - pH][w - pW];
+        }
+    }
+
+    data = move(tempData);
 }
 
 
