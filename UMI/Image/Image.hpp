@@ -6,6 +6,7 @@
 #include "UMI/Image/JPEG/JPEG.hpp"
 #include "UMI/Image/PNG/PNG.hpp"
 #include "UMI/Image/BMP/BMP.hpp"
+#include "Filter/Filter.hpp"
 #include <cuda_runtime.h>
 
 class UMImage
@@ -28,6 +29,7 @@ class UMImage
         void padding(int w, int h){ image->padding(w, h); };
 
         void filter(const vector<vector<int>> &filterMatrix ,int strides);
+        void filter(const vector<vector<int>> &filterMatrix);
 
         void rotate(int degrees){ image->rotate(degrees); }
         void toGray(){ image->toGray(); }
@@ -86,14 +88,24 @@ unique_ptr<Graphic> UMImage::loadImage(const char* filename)
 };
 
 
-void UMImage::filter(const vector<vector<int>> &filterMatrix ,int strides)
+void UMImage::filter(const vector<vector<int>> &filterMatrix)
 {
-    if(cuda_available)
+    /*if(cuda_available)
     {
 
     }else{
         
-    }
+    }*/
+
+    if(filterMatrix.size() == 0 || filterMatrix[0].size() == 0) return;
+
+    padding(filterMatrix.size(),filterMatrix[0].size());
+
+    Filter *filter = new Filter(filterMatrix);
+    vector<vector<Pixels>> newData;
+    newData = filter->make_filter(image->data);
+    image->setData(newData);
+
 }
 
 void UMImage::convert(ImageFormat newFormat)

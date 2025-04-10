@@ -94,6 +94,7 @@ class Graphic {
         void flat();
 
         void setObject(Graphic* oldImage);
+        void setData(vector<vector<Pixels>>  &newData);
 
         Dimensions size(){ return Dimensions{height, width, channels}; }
     
@@ -205,11 +206,11 @@ void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
 
 void Graphic::padding(int padding_w, int padding_h)
 {
-    int pW = padding_w / 2;
-    int pH = padding_h / 2;
-
-    height += padding_h;
-    width += padding_w;
+    int pW = padding_w / 2 + (padding_w % 2);
+    int pH = padding_h / 2 + (padding_h % 2);
+    
+    height += pW;
+    width += pH;
 
     vector<vector<Pixels>>  tempData;
     
@@ -219,7 +220,7 @@ void Graphic::padding(int padding_w, int padding_h)
     {
         tempData[h].resize(width);
     }
-
+    
     for (int h = pH; h < height - pH; ++h) {
         for (int w = pW; w < width - pW; ++w) {
             tempData[h][w] = data[h - pH][w - pW];
@@ -227,6 +228,7 @@ void Graphic::padding(int padding_w, int padding_h)
     }
 
     data = move(tempData);
+
 }
 
 
@@ -243,6 +245,14 @@ void Graphic::setObject(Graphic* oldImage)
 
     loadFileSuccess = oldImage->loadFileSuccess;
     grayscalImage = oldImage->grayscalImage;
+}
+
+
+void Graphic::setData(vector<vector<Pixels>>  &newData)
+{
+    height = newData.size();
+    width = newData[0].size();
+    data = move(newData);
 }
 
 #endif
