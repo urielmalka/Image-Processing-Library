@@ -90,6 +90,9 @@ unique_ptr<Graphic> UMImage::loadImage(const char* filename)
 
 };
 
+void filter(const vector<vector<int>> &filterMatrix ,int strides)
+{}
+
 
 void UMImage::filter(const vector<vector<int>> &filterMatrix)
 {
