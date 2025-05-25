@@ -9,9 +9,22 @@ enable_language(CUDA)
 
 include_directories(${OpenCV_INCLUDE_DIRS} ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 
+file(GLOB_RECURSE SOURCE_FILES
+    "UMI/Image/*.cpp"
+    "UMI/Image/Filter/*.cpp"
+    "UMI/Image/Filter/*.cu"
+    "UMI/Image/BMP/*.cpp"
+    "UMI/Image/JPEG/*.cpp"
+    "UMI/Image/OCV/*.cpp"
+    "UMI/Image/PNG/*.cpp"
+    "UMI/Image/PPM/*.cpp"
+)
+
+
 add_executable(main
     main.cpp
-    UMI/Image/Filter/FilterCuda.cu
+    ${SOURCE_FILES}
 )
+
 target_include_directories(main PRIVATE .)
 target_link_libraries(main ${OpenCV_LIBS} cudart OpenMP::OpenMP_CXX)

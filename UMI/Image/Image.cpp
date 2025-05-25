@@ -1,6 +1,15 @@
 
 #include "Image.hpp"
 
+#include "PPM/P1.hpp"
+#include "PPM/P2.hpp"
+#include "PPM/P3.hpp"
+#include "PPM/P4.hpp"
+#include "PPM/P5.hpp"
+#include "PPM/P6.hpp"
+#include "PPM/P7.hpp"
+
+
 
 UMImage::UMImage(const char* filename){
     image = loadImage(filename);

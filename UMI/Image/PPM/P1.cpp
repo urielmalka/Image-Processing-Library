@@ -1,5 +1,14 @@
 #include "P1.hpp"
 
+
+PPM_P1::PPM_P1(const char* fn): ImagePPM(fn, P1)
+{
+    channels = P1_CHANNEL_NUM;
+    max_value = 1;
+    readPixels();
+    loadFileSuccess = true;
+};
+
 PPM_P1::~PPM_P1() {};
 
 
