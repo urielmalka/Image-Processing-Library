@@ -33,7 +33,7 @@ class UMImage
         void filter(const vector<vector<int>> &filterMatrix);
 
         void rotate(int degrees){ image->rotate(degrees); }
-        void toGray(){ image->toGray(); }
+        void toGray();
         void save(const char* path){ image->save(path); }
         void crop(int x,int y, int w, int h) { image->crop(x,y,w,h); };
 

@@ -68,6 +68,17 @@ void Graphic::toGray ()
     }
 };
 
+void Graphic::CudaToGray ()
+{
+    if(grayscalImage) return;
+    grayscalImage = true;
+    channels = 1;
+
+
+
+    
+};
+
 unsigned char Graphic::luminanceFormula(RGB *rgb)
 {   
     return (0.299 * rgb->R) + (0.587 * rgb->G) + (0.114 * rgb->B);

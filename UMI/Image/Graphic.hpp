@@ -87,6 +87,7 @@ class Graphic {
         void padding(int w, int h);
         
         virtual void toGray();
+        virtual void CudaToGray();
         virtual void save(const char* path);
 
         void rotate(int degrees);

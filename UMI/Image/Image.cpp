@@ -113,3 +113,12 @@ void UMImage::convert(ImageFormat newFormat)
 
     image = std::move(newImage); 
 }
+
+
+void UMImage::toGray(){ 
+    if(cuda_available){
+        image->CudaToGray(); 
+    }else{
+        image->toGray(); 
+    }
+}
