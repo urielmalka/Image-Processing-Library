@@ -39,13 +39,13 @@ Filter::Filter(vector<vector<float>> f)
 
 Filter::~Filter(){};
 
-vector<vector<Pixels>> Filter::make_filter(vector<vector<Pixels>> &image_pixels)
+vector<vector<Pixel>> Filter::make_filter(vector<vector<Pixel>> &image_pixels)
 {
     int image_h = image_pixels.size();
     int image_w = image_pixels[0].size();
 
     vector<PixelLocation> locations;
-    vector<vector<Pixels>> image(image_h - _hf - h_isOdd, vector<Pixels>(image_w - _wf - w_isOdd));
+    vector<vector<Pixel>> image(image_h - _hf - h_isOdd, vector<Pixel>(image_w - _wf - w_isOdd));
 
 
     for(int h = _hf ; h < (image_h - _hf)  ; h++){
@@ -58,7 +58,7 @@ vector<vector<Pixels>> Filter::make_filter(vector<vector<Pixels>> &image_pixels)
     return image;
 }
 
-Pixels Filter::calculation_filter(vector<vector<Pixels>> &image_pixels , const vector<PixelLocation> &work_pixels)
+Pixel Filter::calculation_filter(vector<vector<Pixel>> &image_pixels , const vector<PixelLocation> &work_pixels)
 {
 
     int r =0,g=0,b=0;
@@ -66,8 +66,9 @@ Pixels Filter::calculation_filter(vector<vector<Pixels>> &image_pixels , const v
     for(const PixelLocation &wp : work_pixels)
     {
 
-        if(auto *rgb = get_if<RGB>(&image_pixels[wp.y][wp.x]))
+        if(image_pixels[wp.y][wp.x].type == PixelType::RGB)
         {
+            RGB *rgb = &image_pixels[wp.y][wp.x].rgb;
             r += (rgb->R * wp.f);
             g += (rgb->G * wp.f);
             b += (rgb->B * wp.f);

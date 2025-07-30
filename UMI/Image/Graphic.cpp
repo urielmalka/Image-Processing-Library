@@ -1,4 +1,6 @@
 #include "Graphic.hpp"
+#include <cassert>
+
 
 Graphic::Graphic(ImageFormat f) 
 {
@@ -33,7 +35,7 @@ bool Graphic::openImageBinary()
 
 void Graphic::flat()
 {
-    flatdata.reserve(height * width);
+    flatdata.resize(height * width);
 
     for (int h=0 ; h < height ; h++)
     {
@@ -47,41 +49,91 @@ void Graphic::flat()
 void Graphic::save(const char* path) {};
 void Graphic::readPixels() {};
 
-void Graphic::toGray ()
+void Graphic::toGray()
 {
-    if(grayscalImage) return;
+    if (grayscalImage) return;
     grayscalImage = true;
     channels = 1;
-    
+
     #pragma omp parallel for
-    for(int h=0; h < height; h++){
-        for(int w=0; w < width; w++){
-            if(auto *rgb = get_if<RGB>(&data[h][w])){
-                data[h][w] = Grayscale{luminanceFormula(rgb)};
-            }else if(auto *bgr = get_if<BGR>(&data[h][w]))
-            {
-                RGB rgb = RGB{bgr->r, bgr->g, bgr->b};
-                data[h][w] = Grayscale{luminanceFormula(&rgb)};
+    for (int h = 0; h < height; ++h) {
+        for (int w = 0; w < width; ++w) {
+            Pixel &px = data[h][w];
+
+            switch (px.type) {
+                case PixelType::RGB: {
+                    unsigned char luminance = luminanceFormula(&px.rgb);
+                    px.type = PixelType::Grayscale;
+                    px.gray = Grayscale{luminance};
+                    break;
+                }
+                case PixelType::BGR: {
+                    unsigned char luminance = luminanceFormula(&px.bgr);
+                    px.type = PixelType::Grayscale;
+                    px.gray = Grayscale{luminance};
+                    break;
+                }
+                default:
+                    // Do nothing for Grayscale or Bin
+                    break;
             }
-            
         }
     }
-};
-
-void Graphic::CudaToGray ()
-{
-    if(grayscalImage) return;
-    grayscalImage = true;
-    channels = 1;
+}
 
 
+#ifdef HAS_CUDA
 
-    
-};
+    #include <cuda_runtime.h>
+    #include "../ImageCuda/cuGraphic.cuh"
+
+    void Graphic::CudaToGray ()
+    {
+        std::cout << "Converting image to grayscale using CUDA..." << std::endl;
+
+        if(grayscalImage) return;
+        grayscalImage = true;
+        channels = 1;
+
+        flat();
+
+        size_t bytes = flatdata.size() * sizeof(Pixel);
+
+        Pixel* h_grays = (Pixel*)malloc(bytes);
+        
+
+        assert(flatdata.size() == width * height);
+
+        cuGray(flatdata.data(), h_grays, width, height, bytes);
+
+        #pragma omp parallel for
+        for (int h = 0; h < height; ++h) {
+            for (int w = 0; w < width; ++w) {
+                int idx = h * width + w;
+                data[h][w] = h_grays[idx];
+            }
+        }
+
+        free(h_grays);
+    };
+
+#else
+
+    void Graphic::CudaToGray ()
+    {
+        std::cerr << "CUDA is not available in this build." << std::endl;
+    };
+
+#endif // HAS_CUDA
 
 unsigned char Graphic::luminanceFormula(RGB *rgb)
 {   
     return (0.299 * rgb->R) + (0.587 * rgb->G) + (0.114 * rgb->B);
+};
+
+unsigned char Graphic::luminanceFormula(BGR *bgr)
+{   
+    return (0.299 * bgr->r) + (0.587 * bgr->g) + (0.114 * bgr->b);
 };
 
 void Graphic::rotate(int degrees){};
@@ -93,7 +145,7 @@ void Graphic::crop(int xPos,int yPos, int w_size, int h_size)
         throw std::out_of_range("Crop dimensions out of bounds");
 
 
-    vector<vector<Pixels>>  new_data;
+    vector<vector<Pixel>>  new_data;
     new_data.reserve(h_size);
 
     for(int h=yPos ; h < yPos + h_size ; h++)
@@ -116,7 +168,7 @@ void Graphic::padding(int padding_w, int padding_h)
     height += pW;
     width += pH;
 
-    vector<vector<Pixels>>  tempData;
+    vector<vector<Pixel>>  tempData;
     
     tempData.resize(height);
 
@@ -152,7 +204,7 @@ void Graphic::setObject(Graphic* oldImage)
 }
 
 
-void Graphic::setData(vector<vector<Pixels>>  &newData)
+void Graphic::setData(vector<vector<Pixel>>  &newData)
 {
     height = newData.size();
     width = newData[0].size();

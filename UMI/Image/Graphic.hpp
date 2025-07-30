@@ -13,6 +13,8 @@
 #include <string>
 #include <omp.h>
 
+#include "GraphicTypes.hpp"
+
 class ImagePPM;
 class ImageJPEG;
 class ImagePNG;
@@ -20,44 +22,7 @@ class ImageBMP;
 
 using namespace std;
 
-enum ImageFormat {
-    PPM,
-    PNG,
-    JPEG,
-    BMP,
-    GIF,
-    TIFF,
-    WEBP,
-    HEIF,
-    AVIF,
-    ERROR_FORMAT
-};
 
-
-struct RGB{
-    unsigned char R,G,B;
-};
-
-struct BGR {
-    uint8_t b, g, r; // for .BMP
-};
-
-struct Grayscale{
-    unsigned char I; // intensity
-};
-
-struct BinPixel{
-    bool BIN; // Binary value 
-};
-
-struct Dimensions{
-    int height;
-    int width;
-    int channels;
-};
-
-
-using Pixels = variant<RGB, BGR, Grayscale, BinPixel>;
 
 class Graphic {
 
@@ -81,8 +46,8 @@ class Graphic {
         bool loadFileSuccess = false; 
         bool grayscalImage = false;
 
-        vector<vector<Pixels>>  data;
-        vector<Pixels> flatdata;
+        vector<vector<Pixel>>  data;
+        vector<Pixel> flatdata;
 
         void padding(int w, int h);
         
@@ -95,7 +60,7 @@ class Graphic {
         void flat();
 
         void setObject(Graphic* oldImage);
-        void setData(vector<vector<Pixels>>  &newData);
+        void setData(vector<vector<Pixel>>  &newData);
 
         Dimensions size(){ return Dimensions{height, width, channels}; }
     
@@ -105,6 +70,7 @@ class Graphic {
 
             virtual void readPixels();
             unsigned char luminanceFormula(RGB *rgb);
+            unsigned char luminanceFormula(BGR *bgr);
 
 };
 

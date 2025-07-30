@@ -63,14 +63,14 @@ void ImagePPM::save (const char* path) {
         {
             for(int w = 0; w < width; w++)
             {
-                if(auto *rgb = get_if<RGB>(&data[h][w]))
-                    save_image << rgb->R << " " << rgb->G << " " << rgb->B << std::endl;
-                else if (auto *gray = get_if<Grayscale>(&data[h][w]))
+                if(PixelType::RGB == data[h][w].type)
+                    save_image << data[h][w].rgb.R << " " << data[h][w].rgb.G << " " << data[h][w].rgb.B << std::endl;
+                else if (PixelType::Grayscale == data[h][w].type)
                 {
-                    save_image << static_cast<int>(gray->I) << std::endl;
-                }else if (auto *bin = get_if<BinPixel>(&data[h][w]))
+                    save_image << data[h][w].gray.I << std::endl;
+                }else if (PixelType::Bin == data[h][w].type)
                 {
-                    save_image << static_cast<int>(bin->BIN) << std::endl;
+                    save_image << data[h][w].bin.BIN << std::endl;
                 }
                 
             }

@@ -18,7 +18,7 @@ struct PixelLocation
 class Filter
 {
     private:
-        Pixels calculation_filter(vector<vector<Pixels>> &image_pixels , const vector<PixelLocation> &work_pixels);
+        Pixel calculation_filter(vector<vector<Pixel>> &image_pixels , const vector<PixelLocation> &work_pixels);
         vector<PixelLocation> getFilterPixelLocations(int y, int x);
 
         int width;
@@ -36,7 +36,7 @@ class Filter
         Filter(vector<vector<float>> f);
         ~Filter();
 
-        vector<vector<Pixels>> make_filter(vector<vector<Pixels>> &image_pixels);
+        vector<vector<Pixel>> make_filter(vector<vector<Pixel>> &image_pixels);
 };
 
 

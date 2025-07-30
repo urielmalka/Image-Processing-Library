@@ -15,9 +15,9 @@ class OCV
         // Read the image using OpenCV
         Mat readImage;
 
-        void ocvReadPixels(vector<vector<Pixels>> * data, int height, int width, int channels);
-        void ocvSave(const char * path, const vector<vector<Pixels>> & data, int height, int width, bool isGrayscal);
-        void ocvSetWidthHeightChannels(int *width, int *heiger, int *channels);
+        void ocvReadPixels(vector<vector<Pixel>> * data, int height, int width, int channels);
+        void ocvSave(const char * path, const vector<vector<Pixel>> & data, int height, int width, bool isGrayscale);
+        void ocvSetWidthHeightChannels(int *width, int *height, int *channels);
 
         bool ocvOpenImage(const char *fn);
     

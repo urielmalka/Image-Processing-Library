@@ -13,7 +13,7 @@ PPM_P6::~PPM_P6() {};
 void PPM_P6::readPixels()
 {
 
-    data.resize(height, vector<Pixels>(width, RGB{0,0,0}));
+    data.resize(height, vector<Pixel>(width, Pixel{RGB{0,0,0}}));
 
     string line;
     istringstream iss(line);
@@ -46,14 +46,14 @@ void PPM_P6::save(const char* path)
     // Write P6 header
     out << "P6\n" << width << " " << height << "\n255\n";
 
-    vector<RGB> tempFlatData;
+    vector<Pixel> tempFlatData;
     tempFlatData.reserve(height * width * 3);
 
     // Write binary pixel data
     for (int h = 0; h < height; ++h) {
         for (auto& pixel : data[h]) {
-            if (std::holds_alternative<RGB>(pixel)) {
-                tempFlatData.push_back(std::get<RGB>(pixel));
+            if (PixelType::RGB == pixel.type) {
+                tempFlatData.push_back(pixel);
             }
             else {
                 cerr << "Non-RGB pixel found in data!" << endl;

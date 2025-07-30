@@ -15,7 +15,7 @@ PPM_P1::~PPM_P1() {};
 void PPM_P1::readPixels()
 {
 
-    data.resize(height, vector<Pixels>(width, BinPixel{0}));
+    data.resize(height, vector<Pixel>(width, Pixel{BinPixel{0}}));
 
     bool bin;
     

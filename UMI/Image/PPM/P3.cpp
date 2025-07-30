@@ -17,7 +17,7 @@ PPM_P3::~PPM_P3() {};
 void PPM_P3::readPixels()
 {
 
-    data.resize(height, vector<Pixels>(width, RGB{0,0,0}));
+    data.resize(height, vector<Pixel>(width, Pixel{RGB{0,0,0}}));
 
     string line;
     istringstream iss(line);

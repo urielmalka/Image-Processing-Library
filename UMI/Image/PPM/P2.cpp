@@ -17,7 +17,7 @@ PPM_P2::~PPM_P2() {};
 void PPM_P2::readPixels()
 {
 
-    data.resize(height, vector<Pixels>(width, Grayscale{0}));
+    data.resize(height, vector<Pixel>(width, Pixel{Grayscale{0}}));
 
     int i;
     

@@ -77,7 +77,7 @@ void UMImage::filter(const vector<vector<int>> &filterMatrix)
     padding(filterMatrix.size(),filterMatrix[0].size());
 
     Filter *filter = new Filter(filterMatrix);
-    vector<vector<Pixels>> newData;
+    vector<vector<Pixel>> newData;
     newData = filter->make_filter(image->data);
     image->setData(newData);
 

@@ -4,12 +4,12 @@ OCV::OCV(){}
 
 OCV::~OCV(){}
 
-void OCV::ocvReadPixels(vector<vector<Pixels>> * data, int height, int width, int channels)
+void OCV::ocvReadPixels(vector<vector<Pixel>> * data, int height, int width, int channels)
 {
     if(channels == 1)
-        data->resize(height, vector<Pixels>(width, Grayscale{0}));
+        data->resize(height, vector<Pixel>(width, Pixel{Grayscale{0}}));
     else
-        data->resize(height, vector<Pixels>(width, RGB{0,0,0}));
+        data->resize(height, vector<Pixel>(width, Pixel{RGB{0,0,0}}));
 
 
     #pragma omp parallel for
@@ -18,30 +18,40 @@ void OCV::ocvReadPixels(vector<vector<Pixels>> * data, int height, int width, in
         if (channels == 1) {
             const unsigned char* rowGrayscale = readImage.ptr<unsigned char>(h);
             for (int w = 0; w < width ; w++) {
-                (*data)[h][w] = Grayscale{rowGrayscale[w]};
+                (*data)[h][w] = Pixel{Grayscale{rowGrayscale[w]}};
             }
         } else {
             const cv::Vec3b* rowRGB = readImage.ptr<cv::Vec3b>(h);
             for (int w = 0; w < width; w++) {
-                (*data)[h][w] = RGB{rowRGB[w][2], rowRGB[w][1], rowRGB[w][0]};
+                (*data)[h][w] = Pixel{RGB{rowRGB[w][2], rowRGB[w][1], rowRGB[w][0]}};
             }
         }
     }
 }
 
-void OCV::ocvSave(const char * path, const vector<vector<Pixels>> & data, int height, int width, bool isGrayscal)
+void OCV::ocvSave(const char * path, const vector<vector<Pixel>> & data, int height, int width, bool isGrayscale)
 {
-    Mat image(height, width, isGrayscal ? CV_8UC1 : CV_8UC3);
+    Mat image(height, width, isGrayscale ? CV_8UC1 : CV_8UC3);
 
     #pragma omp parallel for
     for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
-            if (isGrayscal) {
-                auto pixel = get<Grayscale>(data[h][w]);
-                image.at<uchar>(h, w) = pixel.I;
+
+            const Pixel& px = data[h][w];
+
+            if (isGrayscale) {
+                if (px.type == PixelType::Grayscale)
+                    image.at<uchar>(h, w) = px.gray.I;
+                else
+                    image.at<uchar>(h, w) = 0; // fallback
             } else {
-                auto pixel = get<RGB>(data[h][w]);
-                image.at<cv::Vec3b>(h, w) = cv::Vec3b(pixel.B, pixel.G, pixel.R); // OpenCV uses BGR
+                if (px.type == PixelType::RGB) {
+                    image.at<cv::Vec3b>(h, w) = cv::Vec3b(px.rgb.B, px.rgb.G, px.rgb.R);
+                } else if (px.type == PixelType::BGR) {
+                    image.at<cv::Vec3b>(h, w) = cv::Vec3b(px.bgr.b, px.bgr.g, px.bgr.r);
+                } else {
+                    image.at<cv::Vec3b>(h, w) = cv::Vec3b(0, 0, 0); // fallback
+                }
             }
         }
     }

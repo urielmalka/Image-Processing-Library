@@ -37,7 +37,7 @@ ImageBMP::~ImageBMP(){}
 
 void ImageBMP::readPixels()
 {
-    data.resize(height, vector<Pixels>(width, BGR{0,0,0}));
+    data.resize(height, vector<Pixel>(width, Pixel{BGR{0,0,0}}));
 
     int padding = (4 - (width * sizeof(BGR)) % 4) %4;
 
