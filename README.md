@@ -59,7 +59,3 @@ int main() {
 - `UMI/Image/` core image types + format backends
 - `UMI/Image/Filter/` filtering implementations (CPU / optional CUDA)
 - `main.cpp` example program
-
-
-
-TO DO
