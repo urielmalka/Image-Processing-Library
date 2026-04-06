@@ -7,7 +7,10 @@
 #include "UMI/Image/PNG/PNG.hpp"
 #include "UMI/Image/BMP/BMP.hpp"
 #include "Filter/Filter.hpp"
+
+#ifdef HAS_CUDA
 #include "Filter/FilterCuda.cuh"
+#endif
 
 
 class UMImage

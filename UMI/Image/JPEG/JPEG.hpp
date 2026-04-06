@@ -15,11 +15,8 @@ class ImageJPEG : public OCV, public Graphic {
     
     
     private:
-        // Read the image using OpenCV
-        cv::Mat readImage;
-        
         void readPixels() override;
         void setWidthHeightChannels();
-};
+}; 
 
 #endif

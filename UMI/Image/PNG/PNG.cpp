@@ -1,9 +1,9 @@
 #include "PNG.hpp"
 
 
-ImagePNG::ImagePNG () : Graphic(JPEG) {};
+ImagePNG::ImagePNG () : Graphic(PNG) {};
 
-ImagePNG::ImagePNG (const char* fn) : Graphic(fn,JPEG) {
+ImagePNG::ImagePNG (const char* fn) : Graphic(fn,PNG) {
 
     if(!ocvOpenImage(fn)) return;
 

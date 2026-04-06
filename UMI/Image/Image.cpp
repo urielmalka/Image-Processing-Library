@@ -26,9 +26,13 @@ ImageFormat UMImage::getType(const char* filename)
 
     transform(typeImage.begin(),typeImage.end(), typeImage.begin(), ::toupper);
 
+    #ifdef HAS_CUDA
     cudaGetDeviceCount(&cuda_available);
-
     FilterCuda *f = new FilterCuda();
+    (void)f;
+    #else
+    cuda_available = 0;
+    #endif
 
     if(typeImage == "PPM") return PPM;
     else if(typeImage == "PNG") return PNG;
